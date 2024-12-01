@@ -25,9 +25,11 @@ class Organism:
             self.velocity[1] = -self.velocity[1]
             self.position[1] = np.clip(self.position[1], -1, 1)
 
-    def absorb_element(self, element):
-        self.matter.add_element(element)
-        print(f"Организм поглотил {element.symbol}. Материя: {self.matter}")
+    def absorb_matter(self, obj):
+        amount_to_absorb = min(1, obj.amount)
+        self.matter.add_element(obj.element, amount_to_absorb)
+        obj.amount -= amount_to_absorb
+        print(f"Организм поглотил {amount_to_absorb} единиц {obj.element.symbol}. Остаток в объекте: {obj.amount}")
 
     def draw(self):
         glColor3f(*np.array(self.color) / 255.0)
