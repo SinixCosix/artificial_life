@@ -6,15 +6,13 @@ from matter import Matter
 
 
 class Organism:
-    def __init__(self, position, velocity=None, energy=100):
-        if velocity is None:
-            velocity = [-0.01, 0.01]
-
+    def __init__(self, position, velocity=(-0.01, 0.01), energy=100):
         self.position = np.array(position, dtype=float)
         self.velocity = np.array(velocity, dtype=float)
         self.energy = energy
         self.matter = Matter()
         self.color = (0, 255, 0)
+        self.size = 0.05
 
     def update(self):
         self.adjust_velocity_based_on_mass()
@@ -48,18 +46,10 @@ class Organism:
         # Отталкивание от объекта: меняем только направление, оставляя скорость постоянной
         self.velocity = -direction * np.linalg.norm(self.velocity)  # Противоположное направление
 
-    def draw(self):
-        glColor3f(*np.array(self.color) / 255.0)
-        glBegin(GL_QUADS)
-        size = 0.05
-        glVertex2f(self.position[0] - size, self.position[1] - size)
-        glVertex2f(self.position[0] + size, self.position[1] - size)
-        glVertex2f(self.position[0] + size, self.position[1] + size)
-        glVertex2f(self.position[0] - size, self.position[1] + size)
-        glEnd()
 
     def repel(self, other, min_distance=0.1):
         distance = np.linalg.norm(self.position - other.position)
+
         if distance < min_distance:
             direction = self.position - other.position
             if np.linalg.norm(direction) == 0:

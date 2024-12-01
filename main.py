@@ -8,6 +8,7 @@ from OpenGL.GLU import *
 from elements import *
 from object import Object
 from organism import Organism
+from ui.painter import Painter
 
 organisms = [
     Organism(position=[random.uniform(-0.9, 0.9), random.uniform(-0.9, 0.9)])
@@ -27,7 +28,7 @@ def check_collisions(organisms, objects):
             if distance < 0.1:
                 organism.absorb_matter(obj)
                 if obj.amount <= 0:
-                    objects.remove(obj)  # Удаление объекта, если его материя исчерпана
+                    objects.remove(obj)
 
 
 def handle_organism_interactions(organisms):
@@ -46,6 +47,7 @@ def main():
 
     glfw.make_context_current(window)
     gluOrtho2D(-1, 1, -1, 1)
+    painter = Painter()
 
     while not glfw.window_should_close(window):
         glClear(GL_COLOR_BUFFER_BIT)
@@ -54,10 +56,10 @@ def main():
 
         for organism in organisms:
             organism.update()
-            organism.draw()
+            painter.draw(organism)
 
         for obj in objects:
-            obj.draw()
+            painter.draw(obj)
 
         check_collisions(organisms, objects)
 
