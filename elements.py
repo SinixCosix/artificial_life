@@ -1,11 +1,17 @@
 class Element:
-    def __init__(self, symbol, mass, color):
-        self.symbol = symbol  # Символ элемента, например "O" или "H"
-        self.mass = mass  # Молекулярная масса
-        self.color = color  # Цвет для визуализации
+    def __init__(self, symbol=None, mass=0, color=(255, 255, 255)):
+        self.symbol = symbol
+        self.mass = mass
+        self.color = color
 
     def __repr__(self):
         return f"Element({self.symbol}, mass={self.mass})"
+
+    def __eq__(self, other):
+        return self.symbol == other.symbol
+
+    def __hash__(self):
+        return hash(self.symbol)
 
 
 class Oxygen(Element):
@@ -25,7 +31,7 @@ class Carbon(Element):
 
 class Iron(Element):
     def __init__(self):
-        super().__init__("Fe", 56, (255, 0, 0))  # Красный цвет
+        super().__init__("Fe", 56, (255, 0, 0))
 
 
 class Silicon(Element):
@@ -38,7 +44,6 @@ class Calcium(Element):
         super().__init__("Ca", 40, (173, 216, 230))  # Голубой цвет
 
 
-# Словарь элементов можно оставить для быстрого доступа по символу:
 ELEMENTS = {
     "O": Oxygen(),
     "H": Hydrogen(),
@@ -47,4 +52,3 @@ ELEMENTS = {
     "Si": Silicon(),
     "Ca": Calcium()
 }
-

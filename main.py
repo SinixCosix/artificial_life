@@ -30,6 +30,12 @@ def check_collisions(organisms, objects):
                     objects.remove(obj)  # Удаление объекта, если его материя исчерпана
 
 
+def handle_organism_interactions(organisms):
+    for i in range(len(organisms)):
+        for j in range(i + 1, len(organisms)):
+            organisms[i].repel(organisms[j])
+
+
 def main():
     if not glfw.init():
         return
@@ -44,8 +50,10 @@ def main():
     while not glfw.window_should_close(window):
         glClear(GL_COLOR_BUFFER_BIT)
 
+        handle_organism_interactions(organisms)
+
         for organism in organisms:
-            organism.move()
+            organism.update()
             organism.draw()
 
         for obj in objects:
