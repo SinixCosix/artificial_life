@@ -10,14 +10,31 @@ from object import Object
 from organism import Organism
 from ui.painter import Painter
 
-organisms = [
-    Organism(position=[random.uniform(-0.9, 0.9), random.uniform(-0.9, 0.9)])
-    for _ in range(5)
-]
+
+def create_organisms():
+    return [
+        Organism(
+            position=(0.01, 0.01),
+            velocity=(0.01, 0),
+        ),
+        Organism(
+            position=(0.2, 0.01),
+            velocity=(-0.01, 0),
+            color=(0, 0, 255),
+        ),
+    ]
+
+
+def create_random_organisms():
+    return [
+        Organism(position=[random.uniform(-0.9, 0.9), random.uniform(-0.9, 0.9)])
+        for _ in range(5)
+    ]
+
 
 objects = [
-    Object(ELEMENTS["C"], [random.uniform(-0.9, 0.9), random.uniform(-0.9, 0.9)], amount=random.randint(5, 15))
-    for _ in range(20)
+    # Object(ELEMENTS["C"], [random.uniform(-0.9, 0.9), random.uniform(-0.9, 0.9)], amount=random.randint(5, 15))
+    # for _ in range(20)
 ]
 
 
@@ -35,6 +52,9 @@ def handle_organism_interactions(organisms):
     for i in range(len(organisms)):
         for j in range(i + 1, len(organisms)):
             organisms[i].repel(organisms[j])
+
+
+organisms = create_organisms()
 
 
 def main():

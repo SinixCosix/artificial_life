@@ -6,13 +6,13 @@ from matter import Matter
 
 
 class Organism:
-    def __init__(self, position, velocity=(-0.01, 0.01), energy=100):
+    def __init__(self, position, velocity=(-0.01, 0.01), energy=100, color=(0, 255, 0)):
         self.position = np.array(position, dtype=float)
         self.velocity = np.array(velocity, dtype=float)
         self.energy = energy
         self.matter = Matter()
-        self.color = (0, 255, 0)
-        self.size = 0.05
+        self.color = color
+        self.size = 0.02
 
     def update(self):
         self.adjust_velocity_based_on_mass()
@@ -46,17 +46,31 @@ class Organism:
         # Отталкивание от объекта: меняем только направление, оставляя скорость постоянной
         self.velocity = -direction * np.linalg.norm(self.velocity)  # Противоположное направление
 
-
-    def repel(self, other, min_distance=0.1):
-        distance = np.linalg.norm(self.position - other.position)
+    def repel(self, other):
+        """
+        Обработка столкновения с другим организмом.
+        Если организмы пересекаются (накладываются), то корректируем их положение
+        и скорость так, чтобы они оттолкнулись друг от друга.
+        """
+        diff = self.position - other.position
+        distance = np.linalg.norm(diff)
+        min_distance = self.size + other.size  # минимальное допустимое расстояние между центрами
 
         if distance < min_distance:
-            direction = self.position - other.position
-            if np.linalg.norm(direction) == 0:
-                direction = np.array([random.uniform(-1, 1), random.uniform(-1, 1)])
-            direction = direction / np.linalg.norm(direction)
+            # Если центры совпадают, зададим случайное направление, чтобы избежать деления на 0
+            if distance == 0:
+                diff = np.random.rand(2) - 0.5
+                distance = np.linalg.norm(diff)
+            norm_diff = diff / distance
+            # Определяем величину перекрытия
+            overlap = min_distance - distance
 
-            random_offset = np.array([random.uniform(-0.01, 0.01), random.uniform(-0.01, 0.01)])
+            # Корректируем позиции: отодвигаем каждый организм на половину перекрытия
+            self.position += norm_diff * (overlap / 2)
+            other.position -= norm_diff * (overlap / 2)
 
-            self.velocity += direction * 0.01 + random_offset
-            other.velocity -= direction * 0.01 + random_offset
+            # Корректируем скорости для имитации упругого столкновения.
+            # Коэффициент можно настроить (например, 0.01 или другой подходящий коэффициент).
+            repulsion_strength = 0.01
+            self.velocity += norm_diff * repulsion_strength
+            other.velocity -= norm_diff * repulsion_strength
