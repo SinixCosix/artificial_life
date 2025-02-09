@@ -4,25 +4,12 @@ import glfw
 import numpy as np
 from OpenGL.GL import *
 from OpenGL.GLU import *
+import pymunk
 
 from elements import *
 from object import Object
 from organism import Organism
 from ui.painter import Painter
-
-
-def create_organisms():
-    return [
-        Organism(
-            position=(0.01, 0.01),
-            velocity=(0.01, 0),
-        ),
-        Organism(
-            position=(0.2, 0.01),
-            velocity=(-0.01, 0),
-            color=(0, 0, 255),
-        ),
-    ]
 
 
 def create_random_organisms():
@@ -38,28 +25,10 @@ objects = [
 ]
 
 
-def check_collisions(organisms, objects):
-    for organism in organisms:
-        for obj in objects:
-            distance = np.linalg.norm(organism.position - obj.position)
-            if distance < 0.1:
-                organism.absorb_matter(obj)
-                if obj.amount <= 0:
-                    objects.remove(obj)
-
-
-def handle_organism_interactions(organisms):
-    for i in range(len(organisms)):
-        for j in range(i + 1, len(organisms)):
-            organisms[i].repel(organisms[j])
-
-
-organisms = create_organisms()
-
-
 def main():
     if not glfw.init():
         return
+
     window = glfw.create_window(800, 600, "Artificial Life", None, None)
     if not window:
         glfw.terminate()
@@ -69,19 +38,45 @@ def main():
     gluOrtho2D(-1, 1, -1, 1)
     painter = Painter()
 
+    space = pymunk.Space()
+    space.gravity = (0, 0)
+
+    static_lines = [
+        pymunk.Segment(space.static_body, (-1, -1), (1, -1), 0.0),
+        pymunk.Segment(space.static_body, (1, -1), (1, 1), 0.0),
+        pymunk.Segment(space.static_body, (1, 1), (-1, 1), 0.0),
+        pymunk.Segment(space.static_body, (-1, 1), (-1, -1), 0.0),
+    ]
+
+    for line in static_lines:
+        line.elasticity = 1.0
+        space.add(line)
+
+    organisms = []
+    organism = Organism(
+        position=(0.01, 0.01),
+        velocity=(0.4, 0),
+    )
+
+    organisms.append(organism)
+    space.add(organism.body, organism.shape)
+
+    organism = Organism(
+        position=(0.2, 0.01),
+        velocity=(-0.4, 0),
+        color=(0, 0, 255),
+    )
+    organisms.append(organism)
+    space.add(organism.body, organism.shape)
+
     while not glfw.window_should_close(window):
         glClear(GL_COLOR_BUFFER_BIT)
 
-        handle_organism_interactions(organisms)
+        dt = 1 / 30.0
+        space.step(dt)
 
         for organism in organisms:
-            organism.update()
             painter.draw(organism)
-
-        for obj in objects:
-            painter.draw(obj)
-
-        check_collisions(organisms, objects)
 
         glfw.swap_buffers(window)
         glfw.poll_events()

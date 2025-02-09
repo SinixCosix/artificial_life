@@ -8,9 +8,9 @@ class Painter:
         glBegin(GL_QUADS)
 
         size = object.size
-        glVertex2f(object.position[0] - size, object.position[1] - size)
-        glVertex2f(object.position[0] + size, object.position[1] - size)
-        glVertex2f(object.position[0] + size, object.position[1] + size)
-        glVertex2f(object.position[0] - size, object.position[1] + size)
+        glVertex2f(object.body.position[0] - size, object.body.position[1] - size)
+        glVertex2f(object.body.position[0] + size, object.body.position[1] - size)
+        glVertex2f(object.body.position[0] + size, object.body.position[1] + size)
+        glVertex2f(object.body.position[0] - size, object.body.position[1] + size)
 
         glEnd()
