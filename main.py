@@ -4,9 +4,9 @@ import glfw
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
-from organism import Organism
+from simulation.organism import Organism
 from ui.painter import Painter
-from space import Space
+from core.space import Space
 
 
 def create_random_organisms():

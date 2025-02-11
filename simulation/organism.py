@@ -1,8 +1,5 @@
-import random
-
 import numpy as np
-from OpenGL.GL import *
-from matter import Matter
+from simulation.matter import Matter
 
 
 class Organism:
