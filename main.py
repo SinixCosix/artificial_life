@@ -2,11 +2,9 @@ import glfw
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
-from core.space import Space
-from core.transform import Transform
-from core.rigidbody import Rigidbody
-from simulation.organism import Organism
-from ui.painter import Painter
+from core import Rigidbody, Space, Transform
+from simulation import Organism
+from ui import Painter
 
 
 def main():
