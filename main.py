@@ -1,15 +1,12 @@
 import random
 
 import glfw
-import numpy as np
 from OpenGL.GL import *
 from OpenGL.GLU import *
-import pymunk
 
-from elements import *
-from object import Object
 from organism import Organism
 from ui.painter import Painter
+from space import Space
 
 
 def create_random_organisms():
@@ -35,22 +32,10 @@ def main():
         return
 
     glfw.make_context_current(window)
-    gluOrtho2D(-1, 1, -1, 1)
+
+    space = Space()
+    gluOrtho2D(-100, 100, -100, 100)
     painter = Painter()
-
-    space = pymunk.Space()
-    space.gravity = (0, 0)
-
-    static_lines = [
-        pymunk.Segment(space.static_body, (-1, -1), (1, -1), 0.0),
-        pymunk.Segment(space.static_body, (1, -1), (1, 1), 0.0),
-        pymunk.Segment(space.static_body, (1, 1), (-1, 1), 0.0),
-        pymunk.Segment(space.static_body, (-1, 1), (-1, -1), 0.0),
-    ]
-
-    for line in static_lines:
-        line.elasticity = 1.0
-        space.add(line)
 
     organisms = []
     organism = Organism(
@@ -59,21 +44,20 @@ def main():
     )
 
     organisms.append(organism)
-    space.add(organism.body, organism.shape)
+    space.add(organism)
 
-    organism = Organism(
-        position=(0.2, 0.01),
-        velocity=(-0.4, 0),
-        color=(0, 0, 255),
-    )
-    organisms.append(organism)
-    space.add(organism.body, organism.shape)
+    # organism = Organism(
+    #     position=(0.2, 0.01),
+    #     velocity=(-0.4, 0),
+    #     color=(0, 0, 255),
+    # )
+    # organisms.append(organism)
+    # space.add(organism)
 
     while not glfw.window_should_close(window):
         glClear(GL_COLOR_BUFFER_BIT)
 
-        dt = 1 / 30.0
-        space.step(dt)
+        space.update()
 
         for organism in organisms:
             painter.draw(organism)
