@@ -29,8 +29,8 @@ class Organism:
             self,
         )
 
-        self.task = WaypointTask((-4, -4), self)
+        # self.task = WaypointTask((-4, -4), self)
 
     def update(self):
         self.rigidbody.transform.position += self.velocity
-        self.task.update()
+        self.task.do()

@@ -2,16 +2,16 @@ import numpy as np
 
 
 class Task:
-    def update(self, *args, **kwargs):
+    def do(self, *args, **kwargs) -> bool:
         raise NotImplementedError
 
 class WaypointTask(Task):
     def __init__(self, waypoint, organism):
-        self.waypoint = waypoint
+        self.waypoint = np.array(waypoint, dtype=float)
         self.threshold = 1.01
         self.organism = organism
 
-    def update(self):
+    def do(self):
         position = self.organism.transform.position
         distance_x = abs(position[0] - self.waypoint[0])
         distance_y = abs(position[1] - self.waypoint[1])
@@ -25,29 +25,25 @@ class WaypointTask(Task):
 
         self.organism.velocity = norm_dir * self.organism.speed
 
+        return False
+
 
 
 class RouteTask(Task):
-    def __init__(self, waypoints, organism, threshold=5.01):
-        self.waypoints = [np.array(p, dtype=float) for p in waypoints]
-        self.threshold = threshold
-        self.organism = organism
+    def __init__(self, waypoints, organism):
+        self.waypoints = [WaypointTask(waypoint, organism) for waypoint in waypoints]
 
-    def update(self):
+    def do(self):
         if not self.waypoints:
-            self.organism.velocity = np.array([0, 0])
-            return 
+            return True
 
-        point = self.waypoints[0]
-        current_pos = self.organism.position
-
-        if (abs(current_pos[0] - point[0]) < self.threshold
-                and abs(current_pos[1] - point[1]) < self.threshold):
+        task = self.waypoints[0]
+        
+        if task.do():
             self.waypoints.pop(0)
-            return
+            
+            if not self.waypoints:
+                return True
 
-        direction = np.sign(point - current_pos)
-        norm_dir = np.where(direction != 0, np.sign(direction), 0)
-
-        self.organism.velocity = norm_dir * self.organism.speed
-        print(norm_dir)
+        return False
+    
