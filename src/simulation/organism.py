@@ -1,6 +1,6 @@
 import numpy as np
 
-from artificial_intelligence.tasks.task import RouteTask, WaypointTask
+from artificial_intelligence.tasks import RouteTask
 from simulation.matter import Matter
 
 
@@ -29,7 +29,6 @@ class Organism:
             self,
         )
 
-        # self.task = WaypointTask((-4, -4), self)
 
     def update(self):
         self.rigidbody.transform.position += self.velocity
