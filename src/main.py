@@ -11,11 +11,16 @@ def main():
     if not glfw.init():
         return
 
-    window = glfw.create_window(800, 600, "Artificial Life", None, None)
+    monitor = glfw.get_primary_monitor()
+    mode = glfw.get_video_mode(monitor)
+    width, height = mode.size.width, mode.size.height
+
+    window = glfw.create_window(width, height, "Artificial Life", None, None)
     if not window:
         glfw.terminate()
         return
 
+    glfw.set_window_pos(window, 0, 0)
     glfw.make_context_current(window)
 
     space = Space()
