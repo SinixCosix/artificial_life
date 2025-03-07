@@ -20,7 +20,7 @@ def main():
         glfw.terminate()
         return
 
-    glfw.set_window_pos(window, 0, 0)
+    glfw.maximize_window(window)
     glfw.make_context_current(window)
 
     space = Space()
