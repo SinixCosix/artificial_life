@@ -1,53 +1,43 @@
-import glfw
-from OpenGL.GL import *
-from OpenGL.GLU import *
+import arcade
+import numpy as np
 
 from core import Rigidbody, Space, Transform
 from simulation import Organism
 from ui import Painter
 
 
+class SimulationWindow(arcade.Window):
+    def __init__(self, width, height):
+        super().__init__(width, height, "Artificial Life", fullscreen=False)
+        arcade.set_background_color(arcade.color.BLACK)
+
+        self.space = Space()
+        self.painter = Painter()
+        transform = Transform(position=np.array([0, 0]))
+        rigidbody = Rigidbody(transform=transform)
+        organism = Organism(transform, rigidbody)
+        self.space.add(organism)
+
+    def on_draw(self):
+        self.clear()
+
+        for organism in self.space.objects:
+            self.painter.draw(organism)
+
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.ESCAPE:
+            self.close()
+
+    def on_update(self, delta_time):
+        self.space.update()
+
+
 def main():
-    if not glfw.init():
-        return
+    screen = arcade.get_display_size()
+    width, height = screen[0] / 3, screen[1] / 2
 
-    monitor = glfw.get_primary_monitor()
-    mode = glfw.get_video_mode(monitor)
-    width, height = mode.size.width, mode.size.height
-
-    window = glfw.create_window(width, height, "Artificial Life", None, None)
-    if not window:
-        glfw.terminate()
-        return
-
-    glfw.maximize_window(window)
-    glfw.make_context_current(window)
-
-    space = Space()
-    gluOrtho2D(-100, 100, -100, 100)
-    painter = Painter()
-
-    transform = Transform(position=[0, 0])
-    rigidbody = Rigidbody(transform=transform)
-    organism = Organism(transform, rigidbody)
-
-    space.add(organism)
-
-    while not glfw.window_should_close(window):
-        glClear(GL_COLOR_BUFFER_BIT)
-
-        if glfw.get_key(window, glfw.KEY_ESCAPE) == glfw.PRESS:
-            glfw.set_window_should_close(window, True)
-
-        space.update()
-
-        for organism in space.objects:
-            painter.draw(organism)
-
-        glfw.swap_buffers(window)
-        glfw.poll_events()
-
-    glfw.terminate()
+    window = SimulationWindow(width, height)
+    arcade.run()
 
 
 if __name__ == "__main__":
