@@ -29,6 +29,10 @@ class MyGame(arcade.Window):
         # Call the parent class's init function
         super().__init__(width, height, title)
 
+        # Make the mouse disappear when it is over the window.
+        # So we just see our object, not the pointer.
+        self.set_mouse_visible(False)
+
         arcade.set_background_color(arcade.color.ASH_GREY)
 
         # Create our ball
@@ -38,6 +42,20 @@ class MyGame(arcade.Window):
         """ Called whenever we need to draw the window. """
         self.clear()
         self.ball.draw()
+
+    def on_mouse_motion(self, x, y, dx, dy):
+        """ Called to update our objects.
+        Happens approximately 60 times per second."""
+        self.ball.position_x = x
+        self.ball.position_y = y
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        """ Called when the user presses a mouse button. """
+
+        if button == arcade.MOUSE_BUTTON_LEFT:
+            print("Left mouse button pressed at", x, y)
+        elif button == arcade.MOUSE_BUTTON_RIGHT:
+            print("Right mouse button pressed at", x, y)
 
 
 def main():
