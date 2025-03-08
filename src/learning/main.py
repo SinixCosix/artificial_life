@@ -30,6 +30,11 @@ class MyGame(arcade.Window):
         # This variable holds our simple "physics engine"
         self.physics_engine = None
 
+        # Create the cameras. One for the GUI, one for the sprites.
+        # We scroll the 'sprite world' but not the GUI.
+        self.camera_for_sprites = arcade.camera.Camera2D()
+        self.camera_for_gui = arcade.camera.Camera2D()
+
     def setup(self):
 
         # Set the background color
@@ -88,11 +93,41 @@ class MyGame(arcade.Window):
 
     def on_draw(self):
         self.clear()
+
+        # Select the scrolled camera for our sprites
+        self.camera_for_sprites.use()
+
+        # Draw the sprites
         self.wall_list.draw()
         self.player_list.draw()
 
+        # Select the (unscrolled) camera for our GUI
+        self.camera_for_gui.use()
+        arcade.draw_text(f"Score: {self.score}", 10, 10, arcade.color.WHITE, 24)
+
+
     def on_update(self, delta_time):
+        """ Movement and game logic """
+
+        # Call update on all sprites
         self.physics_engine.update()
+
+        # Scroll the screen to the player
+        CAMERA_SPEED = 1  # Скорость для плавности (0–1), 1 — мгновенно
+        # Вычисляем нижний левый угол камеры
+        target_x = self.player_sprite.center_x - self.width / 2
+        target_y = self.player_sprite.center_y - self.height / 2
+
+        # Текущая позиция камеры
+        current_x, current_y = self.camera_for_sprites.position
+
+        # Плавное перемещение (интерполяция)
+        new_x = current_x + (target_x - current_x) * CAMERA_SPEED
+        new_y = current_y + (target_y - current_y) * CAMERA_SPEED
+
+        # Устанавливаем новую позицию камеры
+        self.camera_for_sprites.position = (new_x, new_y)
+        print('xy   ', new_x, new_y)
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
