@@ -1,2 +1,2 @@
-from .painter import *
 from .main_window import *
+from .world_view import *
