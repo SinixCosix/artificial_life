@@ -14,6 +14,8 @@ class WorldView(arcade.View):
         self.space = pymunk.Space()
         self.space.gravity = (0, 0)
         
+        # move organism to somewhere else. for example World class which
+        # which contains organisms, food, objects and etc...
         self.organism = OrganismBuilder.build_primitive()
         self.space.add(self.organism.body, self.organism.shape)
 
