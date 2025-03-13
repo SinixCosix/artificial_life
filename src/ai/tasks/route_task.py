@@ -3,7 +3,7 @@ from .task import Task
 
 
 class RouteTask(Task):
-    def __init__(self, waypoints, organism):
+    def __init__(self, organism, waypoints):
         self.waypoints = [WaypointTask(waypoint, organism) for waypoint in waypoints]
 
     def do(self):

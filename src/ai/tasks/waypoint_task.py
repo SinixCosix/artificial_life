@@ -1,18 +1,20 @@
 import numpy as np
+import pymunk
 
 from .task import Task
 
 
 class WaypointTask(Task):
     def __init__(self, waypoint, organism):
-        self.waypoint = np.array(waypoint, dtype=float)
+        self.waypoint = pymunk.Vec2d(*waypoint)
         self.threshold = 1.01
         self.organism = organism
 
     def do(self):
-        position = self.organism.transform.position
-        distance_x = abs(position[0] - self.waypoint[0])
-        distance_y = abs(position[1] - self.waypoint[1])
+        position = self.organism.body.position
+        distance = position - self.waypoint
+        distance_x = abs(distance.x)
+        distance_y = abs(distance.y)
 
         if distance_x < self.threshold and distance_y < self.threshold:
             self.organism.velocity *= 0
