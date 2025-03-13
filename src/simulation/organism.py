@@ -5,7 +5,7 @@ from simulation.matter import Matter
 
 
 class Organism:
-    def __init__(self, body, shape, speed=0.4, energy=100, color=(0, 255, 0)):
+    def __init__(self, body, shape, speed=20, energy=100, color=(0, 255, 0)):
         self.energy = energy
         self.color = color
         self.matter = Matter()

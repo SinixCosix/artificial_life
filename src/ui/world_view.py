@@ -30,7 +30,8 @@ class WorldView(arcade.View):
         self.camera.on_update()
 
     def on_fixed_update(self, delta_time):
-        self.space.step(delta_time)
+        self.organism.update()
+        self.space.step(0.1)
 
     def on_key_press(self, key, modifiers):
         self.camera.on_key_press(key, modifiers)
