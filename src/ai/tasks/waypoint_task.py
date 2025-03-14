@@ -17,7 +17,6 @@ class WaypointTask(Task):
 
         if distance_x < self.threshold and distance_y < self.threshold:
             self.organism.body.velocity = pymunk.Vec2d(0, 0)
-            self.organism.body.position = self.waypoint
             return True
 
         distance_length = distance.length 
