@@ -1,7 +1,7 @@
-from .organism import Organism
-import core
-import ai
 import pymunk
+
+from .organism import Organism
+import ai
 
 
 class OrganismBuilder():
@@ -24,19 +24,6 @@ class OrganismBuilder():
         organism = Organism(
             body,
             shape,
-        )
-
-        organism.task = ai.RouteTask(
-            organism,
-            [
-                (100, 50),
-                (115, 411),
-                (341, 118),
-                (111, 156),
-                (410, 403),
-                (131, 212),
-                (100, 50),
-            ]
         )
 
         return organism

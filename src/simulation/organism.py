@@ -1,8 +1,5 @@
-import numpy as np
-
-from ai.tasks import RouteTask
 from simulation.matter import Matter
-
+from ai.brain import Brain
 
 class Organism:
     def __init__(self, body, shape, speed=20, energy=100, color=(0, 255, 0)):
@@ -10,13 +7,12 @@ class Organism:
         self.color = color
         self.matter = Matter()
 
+        self.brain = Brain(self)
         self.body = body
         self.shape = shape
 
         self.speed = speed
-        self.task = None
-        # TODO: self.brain = Brain # task manager
 
 
     def update(self):
-        self.task.do()
+        self.brain.update()

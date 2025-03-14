@@ -1,8 +1,5 @@
 import arcade
-import numpy as np
 
-from core import Rigidbody, Space, Transform
-from simulation import Organism
 import ui
 
 
