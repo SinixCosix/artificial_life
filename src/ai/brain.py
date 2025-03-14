@@ -22,11 +22,12 @@ class Brain:
             self.tasks.pop(0)
 
     def generate_task(self):
-        radius = 150
-        x = random.uniform(radius / 3, radius)
+        min_radius = 5
+        radius = 30
+        x = random.uniform(min_radius, radius)
         x = self.organism.body.position.x + x * random.choice((1, -1))
 
-        y = random.uniform(radius / 3, radius)
+        y = random.uniform(min_radius, radius)
         y = self.organism.body.position.y + y * random.choice((1, -1))
 
         self.add_task(WaypointTask((x, y), self.organism))

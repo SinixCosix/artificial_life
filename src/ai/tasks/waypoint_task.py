@@ -15,15 +15,19 @@ class WaypointTask(Task):
         distance_x = abs(distance.x)
         distance_y = abs(distance.y)
 
-        # todo: this cause a bug on high step value. organism starts jumping next to waypoiont
         if distance_x < self.threshold and distance_y < self.threshold:
             self.organism.body.velocity = pymunk.Vec2d(0, 0)
+            self.organism.body.position = self.waypoint
             return True
 
-        direction = np.sign([distance.x, distance.y])
-        norm_dir = pymunk.Vec2d(
-            direction[0] if direction[0] != 0 else 0,
-            direction[1] if direction[1] != 0 else 0
-        )
-        self.organism.body.velocity = norm_dir * self.organism.speed
+        distance_length = distance.length 
+
+        if distance_length > 0:
+            norm_dir = distance.normalized()
+        else:
+            norm_dir = pymunk.Vec2d(0, 0)
+
+        max_speed = min(self.organism.speed, distance_length) 
+        self.organism.body.velocity = norm_dir * max_speed
+
         return False
