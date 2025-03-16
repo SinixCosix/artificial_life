@@ -9,7 +9,7 @@ class Camera(arcade.Camera2D):
         self.speed = 3
         self.velocity = [0, 0]
 
-    def on_update(self):
+    def update(self):
         x = self.position[0] + self.velocity[0]
         y = self.position[1] + self.velocity[1]
         self.position = (x, y)

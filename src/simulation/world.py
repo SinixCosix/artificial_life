@@ -1,5 +1,6 @@
 import pymunk
-from simulation.organism_builder import OrganismBuilder
+
+from core.organism_factory import OrganismFactory
 
 class World:
     def __init__(self):
@@ -9,8 +10,7 @@ class World:
         self.organisms = []
         self.objects = []
 
-        builder = OrganismBuilder()
-        organism = builder.build_static()
+        organism = OrganismFactory.create_basic()
         self.add_organism(organism)
 
     def add_organism(self, organism):

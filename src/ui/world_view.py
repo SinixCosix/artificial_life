@@ -1,7 +1,7 @@
 import arcade
 import pymunk
 
-from simulation.organism_builder import OrganismBuilder
+from core.organism_builder import OrganismBuilder
 from simulation.world import World
 from .camera import Camera
 from .renderer import Renderer
@@ -24,7 +24,7 @@ class WorldView(arcade.View):
         Renderer.render(self.world.objects)
 
     def on_update(self, delta_time):
-        self.camera.on_update()
+        self.camera.update()
         self.world.update(delta_time)
 
     def on_fixed_update(self, delta_time):
@@ -36,6 +36,6 @@ class WorldView(arcade.View):
     def on_key_release(self, key, modifiers):
         self.camera.on_key_release(key, modifiers)
 
-    def on_mouse_drag(self, x, y, dx, dy, button, modifiers):
-        self.camera.on_mouse_drag(x, y, dx, dy, button, modifiers)
+    def on_mouse_drag(self, *args):
+        self.camera.on_mouse_drag(*args)
 

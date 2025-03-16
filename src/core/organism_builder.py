@@ -14,13 +14,16 @@ class OrganismBuilder:
         self.speed = 20
         self.energy = 100
         self.color = (0, 255, 0) 
-        self.with_brain = True  
+        self.has_ai = True  
 
     def set_body(self, body: pymunk.Body):
         self.body = body
         return self
 
     def set_shape(self, shape: list[int|float]):
+        if self.body is None:
+            raise ValueError("Body must be set before setting the shape")
+        
         self.shape = pymunk.Poly(self.body, shape)
         return self
 
@@ -37,7 +40,7 @@ class OrganismBuilder:
         return self
 
     def disable_brain(self):
-        self.with_brain = False
+        self.has_ai = False
         return self
 
     def build(self) -> 'Organism':
@@ -49,33 +52,11 @@ class OrganismBuilder:
             shape=self.shape,
             speed=self.speed,
             energy=self.energy,
-            color=self.color
+            color=self.color,
         )
         
-        if not self.with_brain:
+        if not self.has_ai:
             organism.brain = None
         
         return organism
 
-    def build_random(self) -> 'Organism':
-        body = pymunk.Body(1, random.uniform(50, 500))
-        body.position = (random.uniform(0, 800), random.uniform(0, 600))
-        shape = pymunk.Poly.create_box(body, (random.uniform(10, 30), random.uniform(10, 30)))
-        shape.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255), 255)
-        
-        return (self.set_body(body)
-                   .set_shape(shape)
-                   .set_speed(random.uniform(10, 50))
-                   .set_energy(random.uniform(50, 150))
-                   .build())
-
-    def build_static(self) -> 'Organism':
-        body = pymunk.Body(1, 1)
-        body.position = (100, 100)
-        return (
-            self.set_body(body)
-                .set_shape([(-4, -4), (0, 4), (4, -4)])
-                .set_speed(30)
-                .set_color((255, 255, 0))
-                .build()
-        )
