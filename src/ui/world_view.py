@@ -39,3 +39,6 @@ class WorldView(arcade.View):
     def on_mouse_drag(self, *args):
         self.camera.on_mouse_drag(*args)
 
+    def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
+        self.camera.on_mouse_scroll(x, y, scroll_x, scroll_y)
+
