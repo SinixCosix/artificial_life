@@ -15,4 +15,5 @@ class Organism:
 
 
     def update(self):
-        self.brain.update()
+        if (self.brain):
+            self.brain.update()

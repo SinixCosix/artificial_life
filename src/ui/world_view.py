@@ -2,7 +2,7 @@ import arcade
 import pymunk
 
 from simulation.organism_builder import OrganismBuilder
-
+from simulation.world import World
 from .camera import Camera
 from .renderer import Renderer
 
@@ -11,13 +11,7 @@ class WorldView(arcade.View):
         super().__init__()
 
         self.camera = Camera()
-        self.space = pymunk.Space()
-        self.space.gravity = (0, 0)
-        
-        # move organism to somewhere else. for example World class which
-        # which contains organisms, food, objects and etc...
-        self.organism = OrganismBuilder.build_primitive()
-        self.space.add(self.organism.body, self.organism.shape)
+        self.world = World()
 
     def on_draw(self):
         self.clear()
@@ -25,15 +19,16 @@ class WorldView(arcade.View):
 
         center = arcade.XYWH(-2.5, -2.5, 5, 5)
         arcade.draw_rect_filled(center, (255, 255, 255))
-        
-        Renderer.render(self.organism)
+
+        Renderer.render(self.world.organisms)
+        Renderer.render(self.world.objects)
 
     def on_update(self, delta_time):
         self.camera.on_update()
+        self.world.update(delta_time)
 
     def on_fixed_update(self, delta_time):
-        self.organism.update()
-        self.space.step(0.1)
+        self.world.fixed_update(delta_time)
 
     def on_key_press(self, key, modifiers):
         self.camera.on_key_press(key, modifiers)
