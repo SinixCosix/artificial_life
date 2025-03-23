@@ -6,6 +6,6 @@ class Renderer():
     @staticmethod
     def render(objects):
         for object in objects:
-            poly = [object.body.local_to_world(vertex) for vertex in object.shape.get_vertices()]
+            poly = [object.local_to_world(vertex) for vertex in object.shape.get_vertices()]
             arcade.draw_polygon_filled(poly, object.color)
         

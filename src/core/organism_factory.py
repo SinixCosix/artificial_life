@@ -1,6 +1,8 @@
 import pymunk
 
 from core.organism_builder import OrganismBuilder
+from simulation.matter import Matter
+from simulation.elements import Elements
 
 
 class OrganismFactory:
@@ -19,15 +21,16 @@ class OrganismFactory:
     @staticmethod
     def create_basic():
         builder = OrganismBuilder()
+        matter = Matter()
+        matter.add_element(Elements.C)
+        matter.add_element(Elements.C)
+        matter.add_element(Elements.C)
         
-        body = pymunk.Body(1, 1)
-        body.position = (100, 100)
-
         return (
-            builder.set_body(body)
-                .set_shape([(-4, -4), (0, 4), (4, -4)])
+            builder.set_position((100, 100))
                 .set_speed(30)
                 .set_color((255, 255, 0))
+                .set_matter(matter)
                 .build()
         )
 

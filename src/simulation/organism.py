@@ -1,19 +1,19 @@
-from simulation.matter import Matter
-from ai.brain import Brain
+import pymunk
 
-class Organism:
-    def __init__(self, body, shape, speed=20, energy=100, color=(0, 255, 0)):
-        self.energy = energy
-        self.color = color
-        self.matter = Matter()
+from simulation.matter import Matter
+from simulation.elements import Elements, Atoms
+from ai.brain import Brain
+from simulation.object import Object
+
+class Organism(Object):
+    def __init__(self, matter: Matter, speed=20, energy=100, color=(0, 255, 0)):
+        super().__init__(matter, color, body_type = pymunk.Body.DYNAMIC)
 
         self.brain = Brain(self)
-        self.body = body
-        self.shape = shape
-
         self.speed = speed
+        self.energy = energy
 
+        self.shape.collision_type = 2
 
     def update(self):
-        if (self.brain):
-            self.brain.update()
+        self.brain.update()

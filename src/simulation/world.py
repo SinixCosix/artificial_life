@@ -15,7 +15,7 @@ class World:
 
     def add_organism(self, organism):
         self.organisms.append(organism)
-        self.space.add(organism.body, organism.shape)
+        self.space.add(organism, organism.shape)
 
     def update(self, delta_time):
         for organism in self.organisms:

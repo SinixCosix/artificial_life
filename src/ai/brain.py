@@ -25,9 +25,9 @@ class Brain:
         min_radius = 5
         radius = 30
         x = random.uniform(min_radius, radius)
-        x = self.organism.body.position.x + x * random.choice((1, -1))
+        x = self.organism.position.x + x * random.choice((1, -1))
 
         y = random.uniform(min_radius, radius)
-        y = self.organism.body.position.y + y * random.choice((1, -1))
+        y = self.organism.position.y + y * random.choice((1, -1))
 
         self.add_task(WaypointTask((x, y), self.organism))

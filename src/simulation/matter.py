@@ -1,17 +1,14 @@
+from simulation.elements import Atoms, Elements
+
 class Matter:
     def __init__(self):
-        # Хранение элементов в виде: {Element(): int, }
-        self.elements = {}
+        self.elements = []
 
-    def add_element(self, element, amount=1):
-        if element not in self.elements:
-            self.elements[element] = amount
-            return
-
-        self.elements[element] += amount
-
-    def __repr__(self):
-        return f"Matter({self.elements})"
+    def add_element(self, element: Elements):
+        self.elements.append(element.value)
 
     def total_mass(self):
-        return sum(element.mass * quantity for element, quantity in self.elements.items())
+        return sum(Atoms[element].mass for element in self.elements)
+
+    def total_energy(self):
+        return sum(Atoms[element].valence * 10 for element in self.elements)

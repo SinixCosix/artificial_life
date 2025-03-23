@@ -1,10 +1,12 @@
-import numpy as np
+from simulation.matter import Matter
 
+import pymunk
 
-class Object:
-    def __init__(self, element, position, amount=10):
-        self.element = element
-        self.position = np.array(position, dtype=float)  # Позиция объекта
-        self.amount = amount
-        self.color = element.color
-        self.size = 0.05
+class Object(pymunk.Body):
+    def __init__(self, matter: Matter, color, body_type = pymunk.Body.KINEMATIC):
+        super().__init__(matter.total_mass(), 1, body_type)
+        
+        self.shape = pymunk.Poly(self, [(-4, -4), (0, 4), (4, -4)])
+        self.shape.collision_type = 1
+        self.matter = matter
+        self.color = color
