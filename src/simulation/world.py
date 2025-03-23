@@ -7,11 +7,22 @@ class World:
         self.space = pymunk.Space()
         self.space.gravity = (0, 0)
 
+        handler = self.space.add_collision_handler(2, 2)
+        handler.begin = self.on_collision_begin
+
         self.organisms = []
         self.objects = []
 
         organism = OrganismFactory.create_basic()
         self.add_organism(organism)
+
+        organism = OrganismFactory.create_basic()
+        self.add_organism(organism)
+
+    def on_collision_begin(self, arbiter, space, data):
+        shape1, shape2 = arbiter.shapes
+
+        return True
 
     def add_organism(self, organism):
         self.organisms.append(organism)
