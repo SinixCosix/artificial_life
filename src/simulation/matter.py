@@ -5,7 +5,7 @@ class Matter:
         self.elements = []
 
     def add_element(self, element: Elements):
-        self.elements.append(element.value)
+        self.elements.append(element)
 
     def total_mass(self):
         return sum(Atoms[element].mass for element in self.elements)
