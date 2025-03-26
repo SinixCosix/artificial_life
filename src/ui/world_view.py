@@ -1,9 +1,7 @@
 import arcade
-import pymunk
 
-from core.organism_builder import OrganismBuilder
-from simulation.world import World
 from core.sumulation_runner import SimulationRunner
+from simulation.world import World
 from .camera import Camera
 from .renderer import Renderer
 
@@ -27,8 +25,7 @@ class WorldView(arcade.View):
         center = arcade.XYWH(-2.5, -2.5, 5, 5)
         arcade.draw_rect_filled(center, (255, 255, 255))
 
-        with self.runner.lock:
-            self.renderer.render(self.world.organisms + self.world.objects)
+        self.renderer.render(self.world.organisms + self.world.objects)
 
     def on_update(self, delta_time):
         self.camera.update()

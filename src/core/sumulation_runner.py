@@ -6,6 +6,7 @@ class SimulationRunner:
     def __init__(self, world, target_fps=60):
         self.world = world
         self.target_dt = 1.0 / target_fps
+        self.thread = None
         self.running = False
         self.lock = threading.Lock()
 
@@ -17,12 +18,13 @@ class SimulationRunner:
 
     def stop(self):
         self.running = False
-        if hasattr(self, 'thread'):
+        if self.thread:
             self.thread.join()
 
     def simulation_thread(self):
         while self.running:
             start_time = time.time()
+
             with self.lock:
                 self.world.update(self.target_dt)
                 self.world.fixed_update(self.target_dt)

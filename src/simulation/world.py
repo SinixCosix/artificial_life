@@ -7,7 +7,7 @@ class World:
     def __init__(self):
         self.space = pymunk.Space()
         self.space.gravity = (0, 0)
-        self.space.use_spatial_hash(10, 1000)
+        self.space.use_spatial_hash(10, 10000)
 
         handler = self.space.add_collision_handler(2, 2)
         handler.begin = self.on_collision_begin
@@ -15,7 +15,7 @@ class World:
         self.organisms = []
         self.objects = []
 
-        for _ in range(3000):
+        for _ in range(1000):
             organism = OrganismFactory.create_basic()
             self.add_organism(organism)
 
@@ -29,10 +29,8 @@ class World:
         self.space.add(organism, organism.shape)
 
     def update(self, delta_time):
-        return
         for organism in self.organisms:
             organism.update()
 
     def fixed_update(self, delta_time):
-        return
         self.space.step(0.1)
