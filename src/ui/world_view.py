@@ -3,8 +3,10 @@ import pymunk
 
 from core.organism_builder import OrganismBuilder
 from simulation.world import World
+from core.sumulation_runner import SimulationRunner
 from .camera import Camera
 from .renderer import Renderer
+
 
 class WorldView(arcade.View):
     def __init__(self):
@@ -12,6 +14,11 @@ class WorldView(arcade.View):
 
         self.camera = Camera()
         self.world = World()
+        self.renderer = Renderer()
+        self.renderer.initialize(self.world.organisms + self.world.objects)
+
+        self.runner = SimulationRunner(self.world)
+        self.runner.start()
 
     def on_draw(self):
         self.clear()
@@ -20,15 +27,11 @@ class WorldView(arcade.View):
         center = arcade.XYWH(-2.5, -2.5, 5, 5)
         arcade.draw_rect_filled(center, (255, 255, 255))
 
-        Renderer.render(self.world.organisms)
-        Renderer.render(self.world.objects)
+        with self.runner.lock:
+            self.renderer.render(self.world.organisms + self.world.objects)
 
     def on_update(self, delta_time):
         self.camera.update()
-        self.world.update(delta_time)
-
-    def on_fixed_update(self, delta_time):
-        self.world.fixed_update(delta_time)
 
     def on_key_press(self, key, modifiers):
         self.camera.on_key_press(key, modifiers)
@@ -41,4 +44,3 @@ class WorldView(arcade.View):
 
     def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
         self.camera.on_mouse_scroll(x, y, scroll_x, scroll_y)
-
