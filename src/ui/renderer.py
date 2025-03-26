@@ -10,6 +10,7 @@ class Renderer:
     def initialize(self, items):
         for item in items:
             vertices = item.shape.get_vertices()
+            # TODO: move calculation local_to_world to organism update method
             shape = [item.local_to_world(vertex) for vertex in vertices]
             shape = arcade.shape_list.create_polygon(shape, item.color)
             self.shape_list.append(shape)
